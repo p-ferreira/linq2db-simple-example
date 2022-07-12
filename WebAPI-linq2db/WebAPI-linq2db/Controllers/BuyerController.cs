@@ -30,6 +30,7 @@ namespace WebAPI_linq2db.Controllers
 
             var buyer = query.buyer;
             var address = query.address;
+
             var paymentMethods = _appDataConnection
                 .PaymentMethods
                 .Where(x => x.BuyerId == buyer.Id)
@@ -53,11 +54,10 @@ namespace WebAPI_linq2db.Controllers
                 select new { buyer, address };
             
             var queryResult = query.Single();
-            
-            var paymentMethods = _appDataConnection
-                .PaymentMethods
-                .Where(x => x.BuyerId == id)
-                .AsEnumerable();
+
+            var paymentMethods = from pm in _appDataConnection.PaymentMethods
+                                 where pm.BuyerId == id
+                                 select pm;                
             
             return new GetBuyerQuery
             {
